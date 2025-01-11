@@ -1,0 +1,41 @@
+# Cursor Kuralları
+
+## Kod Yazım Kuralları
+- Gereksiz path ve koordinat detaylarından kaçın
+- Tailwind class'larını mümkün olduğunca theme değişkenleriyle kullan
+- Tekrar eden class'ları @apply ile component haline getir
+- Yorum satırlarını sadece gerekli yerlerde kullan
+- Import path'lerini mümkün olduğunca kısa tut
+- Sadece theme'de tanımlı renkleri kullan (dark, white gibi genel renklerden kaçın)
+- Tekrar eden stilleri parent elementlerde grupla
+- Gereksiz wrapper div'lerden kaçın
+- Component bazlı styling yerine genel stiller kullan
+
+## Kod Standartları
+- ESLint kurallarına uygun kod yazımı
+- Tailwind class'larının düzenli kullanımı
+- Component'lerin modüler yapıda olması
+- Props validation kullanımı
+
+## Dosya Yapısı
+/src
+  /components
+  /pages
+  /context
+  /assets
+  /utils
+  /hooks
+  /data
+
+## Naming Conventions
+- Component isimleri PascalCase
+- Dosya isimleri PascalCase
+- Değişken ve fonksiyon isimleri camelCase
+- Sabitler UPPER_SNAKE_CASE
+
+## Git Commit Kuralları
+- feat: Yeni özellik
+- fix: Hata düzeltmesi
+- docs: Dokümantasyon
+- style: Kod formatı
+- refactor: Kod düzenlemesi 
