@@ -1,12 +1,11 @@
 import { useEffect, useRef } from "react";
-import hektas from "../../assets/images/partners/hektas.png";
 
 function PartnersSection() {
   const containerRef = useRef(null);
 
   const partners = Array(8).fill({
     id: 1,
-    image: hektas,
+    image: "/images/partners/hektas.png",
     name: "Hektas",
   });
 

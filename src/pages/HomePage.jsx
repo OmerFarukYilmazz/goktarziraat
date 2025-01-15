@@ -10,11 +10,11 @@ function Home() {
   return (
     <>
       <HeroSection />
-      <PopularProducts />
-      <FeaturesSection />
       <CategoriesSection />
+      <FeaturesSection />
+      <PopularProducts />   
+      <BlogSection />         
       <VideoSection />
-      <BlogSection />
       <PartnersSection />
     </>
   );

@@ -1,12 +1,16 @@
 # Özellikler Listesi
 
 ## 1. Temel Özellikler (Core Features)
+- [ ] Responsive tasarım
+- [ ] Dark mode
+- [ ] SEO optimizasyonları
+- [ ] Error handling
+- [ ] Loading states
 
 ### Header
 
 - [ ] Logo
 - [ ] Navigasyon menüsü
-- [ ] Responsive tasarım
 - [ ] Mobil menü
 
 ### Ana Sayfa

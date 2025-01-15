@@ -23,30 +23,47 @@
   - [x] Popüler Ürünler
   - [x] Özellikler
   - [x] Kategoriler
-  - [x] Video Bölümü (yapı hazır)
+  - [x] Video Bölümü
   - [x] Blog Bölümü
   - [x] Çözüm Ortakları
-- [ ] Ürünler sayfası tasarımı
-- [ ] Hakkımızda sayfası
-- [ ] İletişim sayfası
+- [x] Hakkımızda sayfası
+  - [x] Hero section
+  - [x] Hikaye bölümü
+  - [x] Görsel grid
+  - [x] Değerlerimiz
+- [x] İletişim sayfası
+  - [x] İletişim bilgileri
+  - [x] Harita
+  - [x] Form
+- [x] Blog sayfası
+  - [x] Blog listesi
+  - [x] Blog detay sayfası
+  - [x] Kategori filtreleme
 
-## Sprint 3: Ürün Yönetimi
+## Sprint 3: Ürün Yönetimi ve Sayfaları
 
-- [ ] Ürün verilerinin oluşturulması (data/products.js)
-- [ ] Ürün kartı komponenti
-- [ ] Ürün listeleme grid yapısı
-- [ ] Ürün detay sayfası
+- [x] Ürün verilerinin oluşturulması
+- [x] Ürünler sayfası
+  - [x] Filtreleme sistemi
+  - [x] Kategori yapısı
+  - [x] Grid görünümü
+- [x] Ürün detay sayfası
+  - [x] Ürün bilgileri
+  - [x] Benzer ürünler
 
-## Sprint 4: UI/UX İyileştirmeleri
+## Sprint 4: State Yönetimi
 
-- [ ] Responsive tasarım kontrolü
+- [ ] Redux kurulumu
+- [ ] API entegrasyonu
+- [ ] Axios setup
 - [ ] Loading states
 - [ ] Error handling
-- [ ] SEO optimizasyonları
 
-## Sprint 5: State Yönetimi ve Final
+## Sprint 5: Optimizasyon ve Deploy
 
-- [ ] Context API implementasyonu
 - [ ] Performans optimizasyonları
+- [ ] SEO düzenlemeleri
 - [ ] Son testler
 - [ ] Deploy
+-
+

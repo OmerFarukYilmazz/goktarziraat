@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import logo from "../../assets/logo_Gok1.png";
 import { useTheme } from "../../context/ThemeContext";
 import { FaMoon, FaSun } from "react-icons/fa";
 
@@ -7,13 +6,13 @@ function Header() {
   const { darkMode, toggleDarkMode } = useTheme();
 
   return (
-    <header className="bg-primary-bg-light border-b border-secondary-bg-dark">
-      <div className="container mx-auto px-10 py-3">
+    <header className="bg-primary-bg-light shadow-xl">
+      <div className="container mx-auto px-10 py-1">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="w-16 h-16">
+          <Link to="/" className="w-24 h-24">
             <img
-              src={logo}
+              src="/images/logo.png"
               alt="Göktar Ziraat Logo"
               className="w-full h-full"
             />
@@ -21,11 +20,12 @@ function Header() {
 
           {/* Ana Menü */}
           <div className="flex flex-1 justify-end gap-2">
-            <nav className="flex items-center gap-9 text-m font-medium">
+            <nav className="flex items-center gap-9 text-base font-semibold">
               {/* Link stilleri nav'a taşındı */}
-              <div className="flex gap-6 [&>a]:relative [&>a]:after:absolute [&>a]:after:bottom-0 [&>a]:after:left-0 [&>a]:after:h-[2px] [&>a]:after:w-0 [&>a]:after:bg-primary [&>a]:after:transition-all [&>a]:after:duration-300 [&>a:hover]:after:w-full [&>a:hover]:text-secondary">
+              <div className="text-primary-dark flex gap-6 [&>a]:relative [&>a]:after:absolute [&>a]:after:bottom-0 [&>a]:after:left-0 [&>a]:after:h-[2px] [&>a]:after:w-0 [&>a]:after:bg-primary [&>a]:after:transition-all [&>a]:after:duration-300 [&>a:hover]:after:w-full [&>a:hover]:text-secondary">
                 <Link to="/">Ana Sayfa</Link>
                 <Link to="/products">Ürünler</Link>
+                <Link to="/blog">Blog</Link>
                 <Link to="/about">Hakkımızda</Link>
                 <Link to="/contact">İletişim</Link>
               </div>
@@ -42,6 +42,7 @@ function Header() {
             </a>
 
             {/* Dark Mode Toggle */}
+            {/*
             <button
               onClick={toggleDarkMode}
               className="p-2 rounded-lg hover:bg-secondary-bg-dark transition-colors"
@@ -52,6 +53,7 @@ function Header() {
                 <FaMoon className="text-rich-dark" />
               )}
             </button>
+            */}
           </div>
         </div>
       </div>

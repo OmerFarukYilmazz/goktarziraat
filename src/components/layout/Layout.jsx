@@ -5,7 +5,7 @@ function Layout({ children }) {
   return (
     <div className="font-lora min-h-screen flex flex-col bg-slate-bg-light">
       <Header />
-      <main className="flex-grow container mx-auto px-4 md:px-10 ">
+      <main className="flex-grow container mx-auto px-4 md:px-10 pt-8">
         <div className="max-w-6xl mx-auto">{children}</div>
       </main>
       <Footer />
