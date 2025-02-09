@@ -1,22 +1,63 @@
 import PropTypes from "prop-types";
 import { FaShareAlt } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
+import { mainCategories } from "../../data/products";
 
 function ProductCard({ product }) {
-  const { id, name, brand, description, image, isNew } = product;
+  const { id, name, brand, isNew, category } = product;
   const navigate = useNavigate();
+  const categoryObj = mainCategories.find((c) => c.id === category);
+
+  const handleClick = () => {
+    if (categoryObj?.hasSubCategories) {
+      navigate(`/products/${category}/${product.subCategory}/detail/${id}`);
+    } else {
+      navigate(`/products/${category}/detail/${id}`);
+    }
+  };
+
+  const handleShare = async (e) => {
+    e.stopPropagation();
+    
+    const shareData = {
+      title: name,
+      text: `${brand} - ${name}`,
+      url: window.location.href
+    };
+
+    if (navigator.share && /mobile|android|iphone/i.test(navigator.userAgent)) {
+      // Mobil cihazlarda native paylaşım
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        console.log('Paylaşım iptal edildi');
+      }
+    } else {
+      // Masaüstünde link kopyalama
+      navigator.clipboard.writeText(window.location.href);
+      // Opsiyonel: Başarılı kopyalama bildirimi gösterilebilir
+    }
+  };
 
   return (
     <div
-      onClick={() => navigate(`/products/${id}`)}
-      className="bg-rich-bg-light rounded-xl overflow-hidden shadow-md group hover:shadow-lg transition-all duration-300 cursor-pointer"
+      onClick={handleClick}
+      className="bg-rich-bg-light rounded-xl overflow-hidden shadow-md group hover:shadow-lg hover:border-white hover:scale-[1.02] transition-all duration-300 cursor-pointer w-full border border-transparent"
     >
       {/* Resim Alanı */}
-      <div className="relative aspect-square">
+      <div className="relative" style={{ height: "280px" }}>
         <img
-          src={image}
-          alt={name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          src={
+            brand
+              ? `/images/brands/${brand.toLowerCase().replace(/\s+/g, "-")}.jpg`
+              : "/images/products/default.jpg"
+          }
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = "/images/products/default.jpg";
+          }}
+          alt={brand || name}
+          className="w-full h-full object-cover"
         />
         {/* Yeni Ürün Badge */}
         {isNew && (
@@ -27,40 +68,38 @@ function ProductCard({ product }) {
         {/* Paylaş Butonu */}
         <button
           className="absolute top-2 right-2 bg-rich-bg-light/80 hover:bg-rich-bg-light p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-          onClick={(e) => {
-            e.stopPropagation(); // Kartın click event'ini engelle
-            navigator.clipboard.writeText(window.location.href);
-          }}
+          onClick={handleShare}
         >
           <FaShareAlt className="text-primary" />
         </button>
       </div>
 
       {/* İçerik Alanı */}
-      <div className="p-4">
-        {/* Üst Kısım: Marka ve İsim */}
-        <div className="flex items-center justify-between mb-2">
-          <h3 className="text-xl font-bold text-rich-dark line-clamp-1">
+      <div className="p-3 flex flex-col h-[140px] text-center">
+        {/* Ürün Adı ve Marka */}
+        <div className="mb-auto">
+          <h3 className="text-base font-bold text-rich-dark line-clamp-2">
             {name}
           </h3>
-          <span className="text-sm font-medium text-primary-dark">{brand}</span>
+          <span className="block text-sm font-medium text-secondary mt-1">
+            {brand}
+          </span>
         </div>
 
-        {/* Açıklama */}
-        <p className="text-sm text-rich-dark/80 line-clamp-2 mb-4">
-          {description}
-          <br />
-          <br />          
-        </p>
-
-        {/* Detay Butonu */}
-        <Link
-          to={`/products/${id}`}
-          onClick={(e) => e.stopPropagation()}
-          className="block w-full py-2 text-sm font-medium text-primary border border-primary rounded-lg hover:bg-primary hover:text-rich-light transition-colors duration-300 text-center"
-        >
-          Ürün Detayı
-        </Link>
+        {/* Ürün Detay Butonu - Ortalı */}
+        <div className="flex items-center justify-center">
+          <Link
+            to={
+              categoryObj?.hasSubCategories
+                ? `/products/${category}/${product.subCategory}/detail/${id}`
+                : `/products/${category}/detail/${id}`
+            }
+            onClick={(e) => e.stopPropagation()}
+            className="inline-block px-4 py-1.5 text-sm font-medium text-primary border border-primary rounded-lg hover:bg-primary hover:text-rich-light transition-colors duration-300"
+          >
+            Ürün Detayı
+          </Link>
+        </div>
       </div>
     </div>
   );
@@ -74,6 +113,8 @@ ProductCard.propTypes = {
     description: PropTypes.string.isRequired,
     image: PropTypes.string.isRequired,
     isNew: PropTypes.bool,
+    category: PropTypes.string.isRequired,
+    subCategory: PropTypes.string,
   }).isRequired,
 };
 

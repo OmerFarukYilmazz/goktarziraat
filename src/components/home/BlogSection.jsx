@@ -32,11 +32,19 @@ function BlogSection() {
                 color="transparent"
                 className="m-0 rounded-none"
               >
-                <img
-                  src={post.image}
-                  alt={post.title}
-                  className="h-[200px] w-full object-cover"
-                />
+                {post.image ? (
+                  <img
+                    src={post.image}
+                    alt={post.title}
+                    className="h-[200px] w-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full aspect-video bg-primary/10 flex items-center justify-center">
+                    <span className="text-6xl font-bold text-primary/30">
+                      {post.author ? post.author.name.charAt(0).toUpperCase() : '?'}
+                    </span>
+                  </div>
+                )}
               </CardHeader>
               <CardBody className="p-6">
                 <Typography

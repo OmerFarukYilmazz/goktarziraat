@@ -49,3 +49,20 @@
   - Loading states
   - Error handling
   ➕ WhatsApp butonu 
+
+## Sprint 3: Ürün Yönetimi ve Sayfaları
+
+- [x] Ürün verilerinin oluşturulması
+- [x] Ürünler sayfası
+  - [x] Filtreleme sistemi
+  - [x] Kategori yapısı
+  - [x] Grid görünümü
+- [x] Ürün detay sayfası
+  - [x] Ürün bilgileri
+  - [x] Benzer ürünler
+- [x] Excel entegrasyonu
+  - [x] Excel okuma sistemi
+  - [x] Veri normalizasyonu
+  - [x] Otomatik kategorizasyon
+- [x] Mobil paylaşım sistemi
+- [x] WhatsApp entegrasyonu 

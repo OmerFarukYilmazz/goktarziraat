@@ -1,230 +1,203 @@
 import { useParams, Link, useNavigate } from "react-router-dom";
 import {
-  products,
+  getProducts,
   mainCategories,
   protectionCategories,
+  nutritionCategories,
 } from "../data/products";
-
 import ProductCard from "../components/ui/ProductCard";
+import { useEffect, useState } from "react";
 
 function ProductDetailPage() {
-  const { id } = useParams();
+  const { id, category, subcategory } = useParams();
   const navigate = useNavigate();
-  const product = products.find((p) => p.id === parseInt(id));
+  const [isLoading, setIsLoading] = useState(true);
+  const [product, setProduct] = useState(null);
+
+  useEffect(() => {
+    const loadProduct = () => {
+      const products = getProducts();
+      if (!products || products.length === 0) {
+        setTimeout(loadProduct, 100);
+        return;
+      }
+      const foundProduct = products.find((p) => p.id === parseInt(id));
+      setProduct(foundProduct);
+      setIsLoading(false);
+    };
+
+    loadProduct();
+  }, [id]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
+          <p className="mt-4 text-secondary">Ürün yükleniyor...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!product) {
-    return <div>Ürün bulunamadı.</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-secondary mb-4">
+            Ürün Bulunamadı
+          </h2>
+          <Link
+            to="/products"
+            className="text-primary hover:text-primary-dark transition-colors"
+          >
+            Tüm Ürünlere Dön
+          </Link>
+        </div>
+      </div>
+    );
   }
 
   // Aynı markaya ait diğer ürünler
-  const brandProducts = products.filter(
-    (p) => p.brand === product.brand && p.id !== product.id
-  );
+  const brandProducts = getProducts()
+    .filter((p) => p.brand === product.brand && p.id !== product.id)
+    .slice(0, 4); // En fazla 4 ürün göster
 
   // Benzer kategorideki ürünler
-  const relatedProducts = products.filter((p) => {
-    if (product.subCategory) {
-      return p.subCategory === product.subCategory && p.id !== product.id;
-    }
-    return p.category === product.category && p.id !== product.id;
-  });
+  const relatedProducts = getProducts()
+    .filter((p) => p.category === product.category && p.id !== product.id)
+    .slice(0, 4); // En fazla 4 ürün göster
 
   // Breadcrumb path'i oluştur
-  const category = mainCategories.find((c) => c.id === product.category);
-  if (!category) {
-    return <div>Kategori bulunamadı.</div>;
-  }
-
-  const subCategory = product.subCategory
-    ? protectionCategories.find((sc) => sc.id === product.subCategory)
-    : null;
-
   const breadcrumbPath = [
-    { name: "Ana Sayfa", path: "/" },
+    { name: "Anasayfa", path: "/" },
     { name: "Tüm Ürünler", path: "/products" },
-    { name: category.name, path: `/products?category=${category.id}` },
-    ...(subCategory
-      ? [
-          {
-            name: subCategory.name,
-            path: `/products?category=${category.id}&subcategory=${subCategory.id}`,
-          },
-        ]
-      : []),
-    { name: product.name, path: null },
   ];
 
+  // Kategori ekle
+  const categoryObj = mainCategories.find((c) => c.id === product.category);
+  if (categoryObj) {
+    breadcrumbPath.push({
+      name: categoryObj.name,
+      path: `/products/${product.category}`,
+    });
+
+    // Alt kategori sadece hasSubCategories true olan kategoriler için
+    if (categoryObj.hasSubCategories && product.subCategory) {
+      const subCategories =
+        product.category === "bitki-koruma"
+          ? protectionCategories
+          : nutritionCategories;
+
+      const subCategoryObj = subCategories.find(
+        (sc) => sc.id === product.subCategory
+      );
+      if (subCategoryObj) {
+        breadcrumbPath.push({
+          name: subCategoryObj.name,
+          path: `/products/${product.category}/${product.subCategory}`,
+        });
+      }
+    }
+  }
+
+  // Ürün adını ekle
+  breadcrumbPath.push({
+    name: product.name,
+    path: categoryObj?.hasSubCategories
+      ? `/products/${product.category}/${product.subCategory}/${product.id}`
+      : `/products/${product.category}/${product.id}`,
+  });
+
   return (
-    <div className="py-8">
+    <div className="min-h-screen py-8">
       {/* Breadcrumb */}
-      <div className="flex items-center text-sm text-secondary mb-6">
+      <div className="flex items-center gap-2 text-sm text-secondary-dark mb-6">
         {breadcrumbPath.map((item, index) => (
           <div key={item.name} className="flex items-center">
-            {item.path ? (
-              <Link
-                to={item.path}
+            {index === breadcrumbPath.length - 1 ? (
+              // Son öğe (ürün adı) için sadece text göster
+              <span className="text-secondary">{item.name}</span>
+            ) : (
+              // Diğer öğeler için tıklanabilir buton
+              <button
+                onClick={() => navigate(item.path)}
                 className="hover:text-primary transition-colors"
               >
                 {item.name}
-              </Link>
-            ) : (
-              <span className="font-medium">{item.name}</span>
+              </button>
             )}
             {index < breadcrumbPath.length - 1 && (
-              <span className="mx-2 text-primary">&gt;</span>
+              <span className="mx-2">/</span>
             )}
           </div>
         ))}
       </div>
 
-      {/* Üst Kısım */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
-        {/* Sol - Ürün Detayları */}
-        <div className="lg:col-span-2 bg-rich-bg-light rounded-xl overflow-hidden shadow-md">
-          <div className="grid grid-cols-1 md:grid-cols-2">
-            {/* Ürün Görseli */}
-            <div className="aspect-square">
-              <img
-                src={product.image}
-                alt={product.name}
-                className="w-full h-full object-cover"
-              />
-            </div>
-
-            {/* Ürün Bilgileri */}
-            <div className="p-8 space-y-6 bg-gradient-to-br from-primary-bg/20 to-transparent">
-              <div>
-                <span className="text-xl font-medium text-primary">
-                  {product.brand}
-                </span>
-                <h1 className="text-3xl font-bold mt-1 text-rich-dark">
-                  {product.name}
-                </h1>
-              </div>
-
-              <p className="text-rich-dark/80">{product.description}</p>
-
-              <div className="space-y-4">
-                <h2 className="font-bold text-secondary-dark">Özellikler</h2>
-                <ul className="space-y-2">
-                  {product.features.map((feature, index) => (
-                    <li key={index} className="flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 bg-primary rounded-full" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          {/* Alt Kısım - Kullanım Detayları */}
-          <div className="border-t border-primary-bg/20">
-            <div className="grid grid-cols-1 md:grid-cols-1">
-              {/* Kullanım Bilgileri */}
-              <div className="p-8 border-b border-primary-bg/20">
-                <div className="space-y-4">
-                  <h2 className="font-bold text-secondary-dark">
-                    Kullanım Bilgileri
-                  </h2>
-                  <table className="w-full text-sm">
-                    <tbody>
-                      <tr className="border-b border-primary-bg/20">
-                        <td className="py-3 font-medium">Doz</td>
-                        <td className="py-3">{product.usage.dosage}</td>
-                      </tr>
-                      <tr className="border-b border-primary-bg/20">
-                        <td className="py-3 font-medium">Uygulama</td>
-                        <td className="py-3">{product.usage.application}</td>
-                      </tr>
-                      <tr>
-                        <td className="py-3 font-medium">Uyumluluk</td>
-                        <td className="py-3">{product.usage.compatibility}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
-              {/* Kullanım Alanları */}
-              <div className="p-8">
-                <h2 className="font-bold text-secondary-dark mb-4">
-                  Kullanım Alanları
-                </h2>
-                <div className="space-y-4">
-                  {product.crops.map((crop, index) => (
-                    <div
-                      key={index}
-                      className="shadow-md p-4 bg-secondary-bg-light rounded-lg hover:bg-primary-bg/30 transition-colors"
-                    >
-                      <h3 className="font-medium text-primary-dark mb-2">
-                        {crop.name}
-                      </h3>
-                      <div className="text-sm space-y-1">
-                        <p>
-                          <span className="font-medium">Doz:</span>{" "}
-                          {crop.dosage}
-                        </p>
-                        <p>
-                          <span className="font-medium">Zamanlama:</span>{" "}
-                          {crop.timing}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
+      {/* Ürün detayları */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Sol - Marka Logosu */}
+        <div className="lg:col-span-1">
+          <img
+            src={`/images/brands/${product.brand
+              .toLowerCase()
+              .replace(/\s+/g, "-")}.jpg`}
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = "/images/brands/default.jpg";
+            }}
+            alt={product.brand}
+            className="w-full rounded-lg shadow-lg object-contain"
+          />
         </div>
 
-        {/* Sağ - Aynı Markanın Diğer Ürünleri */}
-        <div className="bg-rich-bg-light rounded-xl p-6 shadow-md">
-          <h2 className="text-lg font-bold mb-4 text-secondary-dark">
-            {product.brand} Diğer Ürünleri
-          </h2>
+        {/* Orta - Ürün Bilgileri */}
+        <div className="lg:col-span-2">
+          <h1 className="text-3xl font-bold mb-4">{product.name}</h1>
           <div className="space-y-4">
-            {brandProducts.map((brandProduct) => (
-              <button
-                key={brandProduct.id}
-                onClick={() => navigate(`/products/${brandProduct.id}`)}
-                className="w-full p-4 bg-rich-bg rounded-lg hover:bg-primary-bg/20 transition-colors"
-              >
-                <div className="flex gap-4">
-                  <img
-                    src={brandProduct.image}
-                    alt={brandProduct.name}
-                    className="w-20 h-20 object-cover rounded-lg"
-                  />
-                  <div className="text-left">
-                    <h3 className="font-medium text-primary-dark">
-                      {brandProduct.name}
-                    </h3>
-                    <p className="text-sm text-rich-dark/80 line-clamp-2">
-                      {brandProduct.description}
-                    </p>
-                  </div>
-                </div>
-              </button>
-            ))}
+            <p className="text-lg text-gray-600">{product.description}</p>
+            <div className="flex items-center gap-4">
+              <span className="text-sm font-medium">Marka:</span>
+              <span className="text-sm text-gray-600">{product.brand}</span>
+            </div>
+            <div className="flex items-center gap-4">
+              <span className="text-sm font-medium">Kategori:</span>
+              <span className="text-sm text-gray-600">{categoryObj?.name}</span>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Alt Kısım - Benzer Ürünler */}
-      <div>
-        <h2 className="text-2xl font-bold mb-6">Benzer Ürünler</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {relatedProducts.slice(0, 8).map((relatedProduct) => (
-            <ProductCard key={relatedProduct.id} product={relatedProduct} />
-          ))}
-          {relatedProducts.length === 0 && (
-            <div className="col-span-full text-center py-8 text-gray-500">
-              Bu kategoride başka ürün bulunamadı.
+      {/* İlgili Ürünler */}
+      {(brandProducts.length > 0 || relatedProducts.length > 0) && (
+        <div className="mt-16 space-y-12">
+          {/* Aynı Markanın Diğer Ürünleri */}
+          {brandProducts.length > 0 && (
+            <div>
+              <h2 className="text-2xl font-bold mb-6">
+                {product.brand} Markalı Diğer Ürünler
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {brandProducts.map((p) => (
+                  <ProductCard key={p.id} product={p} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Benzer Kategorideki Ürünler */}
+          {relatedProducts.length > 0 && (
+            <div>
+              <h2 className="text-2xl font-bold mb-6">Benzer Ürünler</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {relatedProducts.map((p) => (
+                  <ProductCard key={p.id} product={p} />
+                ))}
+              </div>
             </div>
           )}
         </div>
-      </div>
+      )}
     </div>
   );
 }

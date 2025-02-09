@@ -1,23 +1,23 @@
 import HeroSection from "../components/home/HeroSection";
-import PopularProducts from "../components/home/PopularProducts";
 import FeaturesSection from "../components/home/FeaturesSection";
 import CategoriesSection from "../components/home/CategoriesSection";
+import PopularProducts from "../components/home/PopularProducts";
 import VideoSection from "../components/home/VideoSection";
 import BlogSection from "../components/home/BlogSection";
 import PartnersSection from "../components/home/PartnersSection";
 
-function Home() {
+function HomePage() {
   return (
-    <>
+    <div className="min-h-screen">
       <HeroSection />
-      <CategoriesSection />
       <FeaturesSection />
-      <PopularProducts />   
-      <BlogSection />         
+      <CategoriesSection />
+      <PopularProducts />
       <VideoSection />
+      <BlogSection />
       <PartnersSection />
-    </>
+    </div>
   );
 }
 
-export default Home;
+export default HomePage;

@@ -48,6 +48,9 @@ export default {
         'ping-slow': 'ping 2s cubic-bezier(0, 0, 0.2, 1) infinite',
         'ping-slower': 'ping 3s cubic-bezier(0, 0, 0.2, 1) infinite',
       },
+      maxWidth: {
+        '8xl': '88rem', // 1408px - yeni genişlik
+      },
     },
   },
   plugins: [],

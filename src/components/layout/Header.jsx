@@ -31,7 +31,8 @@ function Header() {
               </div>
             </nav>
 
-            {/* E-Mağaza Butonu */}
+            {/* E-Mağaza Butonu - İleride aktif edilecek */}
+            {/*
             <a
               href="https://magaza.goktarziraat.com"
               target="_blank"
@@ -40,19 +41,6 @@ function Header() {
             >
               E-Mağaza
             </a>
-
-            {/* Dark Mode Toggle */}
-            {/*
-            <button
-              onClick={toggleDarkMode}
-              className="p-2 rounded-lg hover:bg-secondary-bg-dark transition-colors"
-            >
-              {darkMode ? (
-                <FaSun className="text-rich-light" />
-              ) : (
-                <FaMoon className="text-rich-dark" />
-              )}
-            </button>
             */}
           </div>
         </div>
