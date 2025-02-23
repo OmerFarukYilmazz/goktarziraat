@@ -5,10 +5,11 @@ import {
   FaUser,
   FaTag,
   FaArrowLeft,
-  FaShare,
-  FaBookmark,
 } from "react-icons/fa";
 import BlogSection from "../components/home/BlogSection";
+import { Avatar } from "@mui/material";
+import { useToast } from '../context/ToastContext';
+import ShareIcon from "@mui/icons-material/Share";
 
 function BlogDetailPage() {
   const { id } = useParams();
@@ -16,6 +17,25 @@ function BlogDetailPage() {
   const relatedPosts = blogPosts
     .filter((p) => p.category === post?.category && p.id !== post?.id)
     .slice(0, 3);
+  const { showToast } = useToast();
+
+  const handleShare = async () => {
+    try {
+      if (navigator.share && /mobile|android|iphone/i.test(navigator.userAgent)) {
+        await navigator.share({
+          title: post.title,
+          text: post.content.slice(0, 100) + '...',
+          url: window.location.href
+        });
+        showToast('Başarıyla paylaşıldı', 'success');
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+        showToast('Link kopyalandı', 'success');
+      }
+    } catch (err) {
+      showToast('Paylaşım başarısız oldu', 'error');
+    }
+  };
 
   if (!post) {
     return (
@@ -45,14 +65,19 @@ function BlogDetailPage() {
             <span>Blog'a Dön</span>
           </Link>
 
-          <div className="flex gap-4">
-            <button className="p-2 rounded-full bg-primary-bg hover:bg-primary hover:text-white transition-all">
-              <FaShare />
-            </button>
-            <button className="p-2 rounded-full bg-primary-bg hover:bg-primary hover:text-white transition-all">
-              <FaBookmark />
-            </button>
-          </div>
+          <button 
+            onClick={handleShare}
+            className="p-2 rounded-full bg-primary-bg hover:bg-primary hover:text-white transition-all"
+            sx={{
+              color: "#556B2F",
+              "&:hover": {
+                color: "#556B2F",
+                bgcolor: "#556B2F10",
+              },
+            }}
+          >
+            <ShareIcon />
+          </button>
         </div>
 
         <article className="max-w-4xl mx-auto">
@@ -72,7 +97,7 @@ function BlogDetailPage() {
                   <FaCalendar /> {post.date}
                 </span>
                 <span className="flex items-center gap-2">
-                  <FaUser /> {post.author.name}
+                  <FaUser /> {post.author?.name}
                 </span>
                 <span className="flex items-center gap-2">
                   <FaTag /> {post.category}
@@ -82,14 +107,22 @@ function BlogDetailPage() {
           </div>
 
           <div className="flex items-center gap-6 mb-12 p-8 bg-gradient-to-r from-primary-bg to-secondary-bg rounded-2xl">
-            <img
-              src={post.author.avatar}
-              alt={post.author.name}
-              className="w-20 h-20 rounded-full ring-4 ring-white"
-            />
+            {post.author?.avatar ? (
+              <Avatar
+                src={post.author.avatar}
+                alt={post.author.name}
+                className="w-20 h-20 rounded-full ring-4 ring-white"
+              />
+            ) : (
+              <Avatar
+                className="w-20 h-20 rounded-full ring-4 ring-white bg-primary/10 text-primary text-3xl"
+              >
+                {post.author?.name ? post.author.name.charAt(0).toUpperCase() : '?'}
+              </Avatar>
+            )}
             <div>
-              <h3 className="font-bold text-xl mb-1">{post.author.name}</h3>
-              <p className="text-rich-dark/80 mb-2">{post.author.title}</p>
+              <h3 className="font-bold text-xl mb-1">{post.author?.name || 'Yazar'}</h3>
+              <p className="text-rich-dark/80 mb-2">{post.author?.title}</p>
               <div className="flex gap-4">
                 <span className="text-sm bg-white/20 px-3 py-1 rounded-full">
                   {post.category}

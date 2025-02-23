@@ -10,6 +10,8 @@ import BlogDetailPage from "./pages/BlogDetailPage";
 import WhatsAppButton from "./components/ui/WhatsAppButton";
 import { useEffect } from "react";
 import { loadInitialData } from "./utils/loadInitialData";
+import ErrorBoundary from "./components/common/ErrorBoundary";
+import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
   useEffect(() => {
@@ -17,30 +19,33 @@ function App() {
   }, []);
 
   return (
-    <Layout>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route
-          path="/products/:category/detail/:id"
-          element={<ProductDetailPage />}
-        />
-        <Route
-          path="/products/:category/:subcategory/detail/:id"
-          element={<ProductDetailPage />}
-        />
-        <Route path="/products" element={<ProductsPage />} />
-        <Route path="/products/:category" element={<ProductsPage />} />
-        <Route
-          path="/products/:category/:subcategory"
-          element={<ProductsPage />}
-        />
-        <Route path="/blog" element={<BlogPage />} />
-        <Route path="/blog/:id" element={<BlogDetailPage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/contact" element={<ContactPage />} />
-      </Routes>
-      <WhatsAppButton />
-    </Layout>
+    <ErrorBoundary>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route
+            path="/products/:category/detail/:id"
+            element={<ProductDetailPage />}
+          />
+          <Route
+            path="/products/:category/:subcategory/detail/:id"
+            element={<ProductDetailPage />}
+          />
+          <Route path="/products" element={<ProductsPage />} />
+          <Route path="/products/:category" element={<ProductsPage />} />
+          <Route
+            path="/products/:category/:subcategory"
+            element={<ProductsPage />}
+          />
+          <Route path="/blog" element={<BlogPage />} />
+          <Route path="/blog/:id" element={<BlogDetailPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+        <WhatsAppButton />
+      </Layout>
+    </ErrorBoundary>
   );
 }
 

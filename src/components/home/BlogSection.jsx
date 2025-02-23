@@ -9,6 +9,7 @@ import {
   Avatar,
   Tooltip,
 } from "@material-tailwind/react";
+import { Avatar as MuiAvatar } from "@mui/material";
 
 function BlogSection() {
   const truncateContent = (content) => {
@@ -41,7 +42,9 @@ function BlogSection() {
                 ) : (
                   <div className="w-full aspect-video bg-primary/10 flex items-center justify-center">
                     <span className="text-6xl font-bold text-primary/30">
-                      {post.author ? post.author.name.charAt(0).toUpperCase() : '?'}
+                      {post.author
+                        ? post.author.name.charAt(0).toUpperCase()
+                        : "?"}
                     </span>
                   </div>
                 )}
@@ -58,19 +61,27 @@ function BlogSection() {
                 </Typography>
               </CardBody>
               <CardFooter className="flex items-center justify-between p-6 pt-0 mt-auto">
-                <div className="flex items-center">
-                  <Tooltip
-                    className="text-rich-dark"
-                    content={`${post.author.name}`}
-                  >
-                    <Avatar
+                <div className="flex items-center gap-2">
+                  {post.author?.avatar ? (
+                    <MuiAvatar
                       size="sm"
                       variant="circular"
                       alt={post.author.name}
                       src={post.author.avatar}
-                      className="rounded-full w-10 h-10 border-2 border-primary-bg-dark hover:z-10 cursor-pointer"
+                      className="w-10 h-10 border-2 border-primary-bg-dark cursor-pointer"
                     />
-                  </Tooltip>
+                  ) : (
+                    <MuiAvatar
+                      size="sm"
+                      variant="circular"
+                      className="w-10 h-10 border-2 border-primary-bg-dark cursor-pointer bg-primary/10 text-primary"
+                    >
+                      {post.author?.name ? post.author.name.charAt(0).toUpperCase() : '?'}
+                    </MuiAvatar>
+                  )}
+                  <span className="text-sm text-rich-dark/80">
+                    {post.author?.name || 'Yazar'}
+                  </span>
                 </div>
                 <Typography className="font-normal text-sm text-primary">
                   {post.date}

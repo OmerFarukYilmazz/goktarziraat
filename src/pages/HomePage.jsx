@@ -13,7 +13,7 @@ function HomePage() {
       <FeaturesSection />
       <CategoriesSection />
       <PopularProducts />
-      <VideoSection />
+      {/* <VideoSection /> */}
       <BlogSection />
       <PartnersSection />
     </div>

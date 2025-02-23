@@ -17,6 +17,8 @@ import {
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { useToast } from '../context/ToastContext';
+import PropTypes from 'prop-types';
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -30,7 +32,27 @@ const ExpandMore = styled((props) => {
 }));
 
 function BlogCard({ post }) {
+  const { showToast } = useToast();
   const [expanded, setExpanded] = useState(false);
+
+  const handleShare = async (e) => {
+    e.preventDefault(); // Link tıklamasını engelle
+    try {
+      if (navigator.share && /mobile|android|iphone/i.test(navigator.userAgent)) {
+        await navigator.share({
+          title: post.title,
+          text: post.excerpt,
+          url: window.location.href
+        });
+        showToast('Başarıyla paylaşıldı', 'success');
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+        showToast('Link kopyalandı', 'success');
+      }
+    } catch (err) {
+      showToast('Paylaşım başarısız oldu', 'error');
+    }
+  };
 
   return (
     <Link to={`/blog/${post.id}`}>
@@ -139,16 +161,7 @@ function BlogCard({ post }) {
           >
             <FavoriteIcon />
           </IconButton>
-          <IconButton
-            aria-label="paylaş"
-            sx={{
-              color: "#556B2F",
-              "&:hover": {
-                color: "#556B2F",
-                bgcolor: "#556B2F10",
-              },
-            }}
-          >
+          <IconButton onClick={handleShare}>
             <ShareIcon />
           </IconButton>
           <ExpandMore
@@ -182,6 +195,23 @@ function BlogCard({ post }) {
     </Link>
   );
 }
+
+BlogCard.propTypes = {
+  post: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    excerpt: PropTypes.string.isRequired,
+    content: PropTypes.string.isRequired,
+    image: PropTypes.string.isRequired,
+    date: PropTypes.string.isRequired,
+    category: PropTypes.string.isRequired,
+    author: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      avatar: PropTypes.string,
+      title: PropTypes.string
+    }).isRequired
+  }).isRequired
+};
 
 function BlogPage() {
   return (

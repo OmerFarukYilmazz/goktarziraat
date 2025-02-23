@@ -56,8 +56,26 @@
 - [ ] Redux kurulumu
 - [ ] API entegrasyonu
 - [ ] Axios setup
-- [ ] Loading states
-- [ ] Error handling
+- [x] Loading states
+
+  - [x] Sayfa yüklenirken loading gösterimi
+  - [x] Ürün listesi yüklenirken loading gösterimi
+  - [x] Blog listesi yüklenirken loading gösterimi
+  - [x] Detay sayfaları için loading gösterimi
+  - [x] Skeleton loaders eklenmesi
+
+- [x] Error handling
+
+  - [x] Veri yükleme hataları için error boundary
+  - [x] 404 sayfası tasarımı
+  - [x] Ürün bulunamadı durumu
+  - [x] Blog yazısı bulunamadı durumu
+  - [x] Genel hata sayfası tasarımı
+
+- [x] Kullanıcı feedback
+  - [x] Toast notifications
+  - [x] Başarılı/başarısız durumlar için bildirimler
+  - [x] Paylaşım bildirimleri
 
 ## Sprint 5: Optimizasyon ve Deploy
 
@@ -65,5 +83,36 @@
 - [ ] SEO düzenlemeleri
 - [ ] Son testler
 - [ ] Deploy
--
 
+## Sprint 6: Mobil Uyumluluk İyileştirmeleri
+
+- [ ] Header mobil tasarım
+
+  - [ ] Mobil menü
+  - [ ] Responsive logo
+  - [ ] Hamburger menü
+
+- [ ] Ana sayfa mobil uyumluluğu
+
+  - [ ] Hero section responsive tasarım
+  - [ ] Kategori kartları mobil görünüm
+  - [ ] Blog section mobil düzen
+  - [ ] Partner slider mobil optimizasyonu
+
+- [ ] Ürünler sayfası mobil uyumluluğu
+
+  - [ ] Filtre menüsü mobil tasarımı
+  - [ ] Ürün kartları mobil grid
+  - [ ] Arama ve filtreleme mobil UX
+
+- [ ] Detay sayfaları mobil tasarımı
+
+  - [ ] Ürün detay sayfası mobil düzen
+  - [ ] Blog detay sayfası mobil görünüm
+  - [ ] Breadcrumb mobil uyumluluğu
+
+- [ ] Genel mobil iyileştirmeler
+  - [ ] Touch gesture desteği
+  - [ ] Font size optimizasyonları
+  - [ ] Spacing düzenlemeleri
+  - [ ] Input ve buton boyutları

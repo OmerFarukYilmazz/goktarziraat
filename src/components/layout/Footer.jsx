@@ -30,29 +30,35 @@ function Footer() {
           <div className="space-y-4">
             <h3 className="text-lg font-bold">İletişim</h3>
             <div className="space-y-3 [&>a]:flex [&>a]:items-center [&>a]:gap-2">
-              <a
-                href={contactInfo.address.maps}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-primary transition-colors"
-              >
-                <FaMapMarkerAlt className="text-primary-light" />
-                <p>{contactInfo.address.text}</p>
-              </a>
-              <a
-                href={contactInfo.phone.link}
-                className="hover:text-primary transition-colors"
-              >
-                <FaPhone className="text-primary-light" />
-                <p>{contactInfo.phone.text}</p>
-              </a>
-              <a
-                href={contactInfo.email.link}
-                className="hover:text-primary transition-colors"
-              >
-                <FaEnvelope className="text-primary-light" />
-                <p>{contactInfo.email.text}</p>
-              </a>
+              <div className="flex items-start gap-3">
+                <FaMapMarkerAlt className="text-2xl text-primary flex-shrink-0" />
+                <a
+                  href={contactInfo.address.maps}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-primary transition-colors"
+                >
+                  {contactInfo.address.text}
+                </a>
+              </div>
+              <div className="flex items-center gap-3">
+                <FaPhone className="text-2xl text-primary" />
+                <a
+                  href={contactInfo.phone.link}
+                  className="hover:text-primary transition-colors"
+                >
+                  {contactInfo.phone.text}
+                </a>
+              </div>
+              <div className="flex items-center gap-3">
+                <FaEnvelope className="text-2xl text-primary" />
+                <a
+                  href={contactInfo.email.link}
+                  className="hover:text-primary transition-colors"
+                >
+                  {contactInfo.email.text}
+                </a>
+              </div>
             </div>
           </div>
 

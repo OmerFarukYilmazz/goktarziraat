@@ -2,11 +2,13 @@ import PropTypes from "prop-types";
 import { FaShareAlt } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { mainCategories } from "../../data/products";
+import { useToast } from '../../context/ToastContext';
 
 function ProductCard({ product }) {
   const { id, name, brand, isNew, category } = product;
   const navigate = useNavigate();
   const categoryObj = mainCategories.find((c) => c.id === category);
+  const { showToast } = useToast();
 
   const handleClick = () => {
     if (categoryObj?.hasSubCategories) {
@@ -18,24 +20,23 @@ function ProductCard({ product }) {
 
   const handleShare = async (e) => {
     e.stopPropagation();
-    
+
     const shareData = {
       title: name,
       text: `${brand} - ${name}`,
-      url: window.location.href
+      url: window.location.href,
     };
 
-    if (navigator.share && /mobile|android|iphone/i.test(navigator.userAgent)) {
-      // Mobil cihazlarda native paylaşım
-      try {
+    try {
+      if (navigator.share && /mobile|android|iphone/i.test(navigator.userAgent)) {
         await navigator.share(shareData);
-      } catch (err) {
-        console.log('Paylaşım iptal edildi');
+        showToast('Başarıyla paylaşıldı', 'success');
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+        showToast('Link kopyalandı', 'success');
       }
-    } else {
-      // Masaüstünde link kopyalama
-      navigator.clipboard.writeText(window.location.href);
-      // Opsiyonel: Başarılı kopyalama bildirimi gösterilebilir
+    } catch (err) {
+      showToast('Paylaşım başarısız oldu', 'error');
     }
   };
 
